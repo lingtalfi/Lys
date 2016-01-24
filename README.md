@@ -18,6 +18,8 @@ Features
 
 - simple and lightweight
 - easily extendable
+- works in Chrome and Firefox: it's not designed for other browsers (I did even not test it in other browsers)
+
 
 
 Note: depends on jquery
