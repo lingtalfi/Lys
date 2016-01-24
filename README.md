@@ -63,7 +63,7 @@ When the ball reaches the water, the service is requested.
 
 This skin comes with cool css3 transitions that appears at the bottom of your wall.
  
-![Water and ball css3 transition at the bottom](http://postimg.org/image/bfllsd1pb/)
+![Water and ball css3 transition at the bottom](http://s19.postimg.org/r12xcbdnn/lys.png)
 
 See how you would use it with the following example:
 
