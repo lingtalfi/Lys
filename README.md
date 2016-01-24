@@ -218,7 +218,7 @@ So much so that a skin is actually a standalone infinite scroll implementation o
 
 The following skins are available so far (based on my personal needs, pull requests are welcome):
 
-- [water and ball](https://github.com/lingtalfi/lys/#water-and-ball) 
+- [water and ball](https://github.com/lingtalfi/lys/#water-and-ball-example) 
 
 
 ### To use a skin
