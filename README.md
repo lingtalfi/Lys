@@ -205,7 +205,7 @@ all other elements are by default automatically generated (options.autoMarkup=tr
 
 
 
-Skin
+Skins
 --------
 
 Being able to create your own sensors is a good thing.
