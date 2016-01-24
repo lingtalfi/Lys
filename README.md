@@ -49,6 +49,7 @@ if you decided so...
 Water and Ball example
 ----------------------
 
+
 This example uses a [skin](https://github.com/lingtalfi/lys/#skins).
 Notice that you need a server that can serve php pages to run this example.
 
@@ -62,6 +63,7 @@ When the ball reaches the water, the service is requested.
 
 This skin comes with cool css3 transitions that appears at the bottom of your wall.
  
+![Water and ball css3 transition at the bottom](http://postimg.org/image/bfllsd1pb/)
 
 See how you would use it with the following example:
 
