@@ -256,7 +256,6 @@ Then in your page:
 
 
 ```html
-<!-- ... ->
 <script>
     (function ($) {
         $(document).ready(function () {
@@ -267,7 +266,6 @@ Then in your page:
         });
     })(jQuery);
 </script>
-<!-- ... ->
 ```
 
 ### threshold skin: How does it work?
