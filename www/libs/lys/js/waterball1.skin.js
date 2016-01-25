@@ -95,8 +95,14 @@
              */
             cssClass: {
                 wallContainer: 'wall_container'
-            }
-
+            },
+            /**
+             * By default, the params sent to the request is a map containing the (auto-incremented) count value.
+             * The startingCount option specifies the starting value of "count".
+             *
+             * Default is 1
+             */
+            startingCount: 1
         }, options);
 
 
@@ -108,7 +114,7 @@
         //}
 
 
-        var count = 1;
+        var count = settings.startingCount;
 
 
         //------------------------------------------------------------------------------/
@@ -137,10 +143,12 @@
             onFetchSuccess: function (lys, content) {
                 if (content) {
                     $(lys.element).append(settings.wrapContent(content));
-                    setTimeout(function () {
-                        jWallContainer.removeClass('active');
-                    }, 1000);
                 }
+            },
+            onFetchAfter: function(){
+                setTimeout(function () {
+                    jWallContainer.removeClass('active');
+                }, 1000);
             },
             sensors: [
                 //------------------------------------------------------------------------------/

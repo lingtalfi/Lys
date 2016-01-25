@@ -204,8 +204,14 @@ all other elements are by default automatically generated (options.autoMarkup=tr
      */
     cssClass: {
         wallContainer: 'wall_container'
-    }
-
+    },
+    /**
+     * By default, the params sent to the request is a map containing the (auto-incremented) count value.
+     * The startingCount option specifies the starting value of "count". 
+     * 
+     * Default is 1
+     */
+    startingCount: 1
 }
 ```
 
@@ -308,7 +314,14 @@ See options for more details.
      */
     wrapContent: function (content) {
         return '<p>' + content + '</p>';
-    }
+    },
+    /**
+     * By default, the params sent to the request is a map containing the (auto-incremented) count value.
+     * The startingCount option specifies the starting value of "count". 
+     * 
+     * Default is 1
+     */
+    startingCount: 1    
 }
 ```
   
@@ -452,6 +465,11 @@ Lys default options
 
 History Log
 ------------------
+    
+- 1.2.0 -- 2016-01-25
+
+    - add startingCount option for waterball and threshold skins 
+    - fix loader stop placement  
     
 - 1.1.0 -- 2016-01-25
 

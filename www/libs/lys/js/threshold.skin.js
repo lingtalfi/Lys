@@ -79,12 +79,19 @@
              */
             wrapContent: function (content) {
                 return '<p>' + content + '</p>';
-            }
+            },
+            /**
+             * By default, the params sent to the request is a map containing the (auto-incremented) count value.
+             * The startingCount option specifies the starting value of "count". 
+             * 
+             * Default is 1
+             */
+            startingCount: 1
         }, options);
 
 
         // useful vars
-        var count = 1;
+        var count = settings.startingCount;
         var jBody = $('body');
 
 
@@ -109,14 +116,15 @@
             onFetchSuccess: function (lys, content) {
                 if (content) {
                     $(lys.element).append(settings.wrapContent(content));
-                    setTimeout(function () {
-                        jBody.removeClass('lys_scrolling');
-                    }, 1000);
                 }
+            },
+            onFetchAfter: function(){
+                setTimeout(function () {
+                    jBody.removeClass('lys_scrolling');
+                }, 1000);
             },
             sensors: [
                 function (lys) {
-                    console.log("j");
                     $(window).on('scroll.lys', function () {
                         var scrolledDistance = $(window).scrollTop();
                         var maximumScrollableDistance = $(document).height() - $(window).height();
