@@ -7,6 +7,9 @@
      * The ball falls from a wall, down to the water...
      * When the ball reaches the water, we fetch using fetch(count++)
      *
+     * This is designed to provide infinite scroll for a specific element on the page.
+     * If you need infinite scroll for the whole page, you should use another system.
+     * 
      *
      * Markup is the following:
      *

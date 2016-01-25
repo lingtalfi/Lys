@@ -61,6 +61,10 @@ At the bottom of the wall, you have the water, which height you can control.
 When the ball reaches the water, the service is requested.
 
 
+The water and ball skin was designed to provide infinite scrolling on a specific element in your page.
+If you need an infinite scrolling for your whole page, you should use another skin (like threshold for instance).
+
+
 This skin comes with cool css3 transitions that appears at the bottom of your wall.
  
 ![Water and ball css3 transition at the bottom](http://s19.postimg.org/mggqxdtyb/lys.png)
@@ -221,15 +225,95 @@ So much so that a skin is actually a standalone infinite scroll implementation o
 The following skins are available so far (based on my personal needs, pull requests are welcome):
 
 - [water and ball](https://github.com/lingtalfi/lys/#water-and-ball-example) 
+- [threshold](https://github.com/lingtalfi/lys/#threshold-skin) 
 
 
 ### To use a skin
 
 Use the skin and skinParams lys options.
-See the water and ball example.
+See the water and ball example, or the threshold example.
 
 
 
+Threshold skin
+-----------------
+
+Threshold skin is designed to provide infinite scroll on your whole page.
+
+### Setup
+
+
+In your head, call the appropriate assets:
+
+```html
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="/libs/lys/js/lys.js"></script>
+    <script src="/libs/lys/js/threshold.skin.js"></script>
+    <link rel="stylesheet" href="/libs/lys/css/threshold.css">
+```
+
+Then in your page: 
+
+
+```html
+<!-- ... ->
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            $('#my_wall').lys({
+                url: "/libs/lys/service/lorem.php",
+                skin: "threshold"
+            });                
+        });
+    })(jQuery);
+</script>
+<!-- ... ->
+```
+
+### threshold skin: How does it work?
+
+Threshold let you specify a threshold which represents the percentage of total available scrolling above which 
+the request is triggered.
+
+See options for more details.
+
+
+### threshold skin Options
+
+```js
+{
+    /**
+     * The threshold (int), which represents the percentage of total available scrolling above which (or equals to) the request is triggered.
+     * The default is 100, which means that the user needs to reach the very bottom of the page to trigger the request.
+     */
+    threshold: 100,
+    /**
+     * Whether or not to automatically build the necessary skin markup.
+     * Default is true.
+     */
+    autoMarkup: true,
+    /**
+     * By default, when the ball is in the "water zone", and if the user keeps scrolling down,
+     * numerous scroll events are fired.
+     *
+     * The requestDelay represents the minimum amount of time between two consecutive requests.
+     * As a consequence of the current implementation, it's also the delay after which
+     * a request is executed (but this second behaviour might be removed at any time).
+     *
+     * Default is 250.
+     */
+    requestDelay: 250,
+    /**
+     * When the request returns the content, the content gets appended to the wall.
+     * Before it does so, it calls the wrapContent callback to give the developer the opportunity
+     * to wrap the content within special html markup.
+     */
+    wrapContent: function (content) {
+        return '<p>' + content + '</p>';
+    }
+}
+```
+  
 
 
  
@@ -370,6 +454,11 @@ Lys default options
 
 History Log
 ------------------
+    
+- 1.1.0 -- 2016-01-25
+
+    - add threshold skin 
+    
     
 - 1.0.0 -- 2016-01-24
 
