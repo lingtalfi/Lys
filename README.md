@@ -466,6 +466,12 @@ Lys default options
 History Log
 ------------------
     
+- 1.3.0 -- 2016-01-30
+
+    - add lys_waterball namespace for mousewheel event
+    - add lys_waterball urlParams, autoIncrementedUrlParamName, and pluginParams options
+    - fix bug for retrieving lys instance
+
 - 1.2.0 -- 2016-01-25
 
     - add startingCount option for waterball and threshold skins 

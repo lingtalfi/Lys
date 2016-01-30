@@ -3,6 +3,10 @@
 
     var pluginName = 'lys';
     var pluginSensorName = pluginName + 'Sensor';
+
+    /**
+     * The skins automatically register themselves into this map.
+     */
     window.lysSkins = {};
 
 
@@ -22,7 +26,7 @@
             /**
              * This callback is fired just before the service is requested.
              * If the callback returns false, then the service is NOT requested.
-             * 
+             *
              * - lys is the lys instance
              * - sensorParams are the params that are sent to the service.
              */
@@ -31,12 +35,12 @@
             /**
              * This callback is called after that the request to the service has been executed,
              * even if the request was a failure.
-             * 
-             * It simply is called via the .always() jquery method 
+             *
+             * It simply is called via the .always() jquery method
              * https://api.jquery.com/deferred.always/
-             * 
-             * 
-             * 
+             *
+             *
+             *
              */
             onFetchAfter: function (lys, sensorParams) {
             },
@@ -50,21 +54,21 @@
             /**
              * A sensor is responsible for detecting WHEN the fetch service should be called.
              * It could be on page scroll, or on a button click, or other things...
-             * 
+             *
              * A sensor is just a callback, and its GOAL is to call the lys.fetch method.
-             * 
+             *
              *      void        callable:sensor ( lys )
              *                          // do something, then...
              *                          var requestParams = {};
-             *                          lys.fetch(requestParams); // call this method when you need it...    
-             *                              
-             * 
+             *                          lys.fetch(requestParams); // call this method when you need it...
+             *
+             *
              */
             sensors: [],
             /**
              * The name of the skin you want to use.
              * A skin is like a preset of sensors and more.
-             * 
+             *
              * With the power of skins, it's easy to do one liner setups...
              */
             skin: null,
@@ -74,17 +78,18 @@
             skinParams: {}
         };
 
+        var skinInstance;
 
-        this.settings = $.extend({}, defaults, options);
         this.element = element;
 
 
+        this.settings = $.extend({}, defaults, options);
         //------------------------------------------------------------------------------/
-        // ATTACHING SKINS
+        // ATTACHING SKIN (only one per instance)
         //------------------------------------------------------------------------------/
         if (null !== this.settings.skin) {
             if (this.settings.skin in window.lysSkins) {
-                window.lysSkins[this.settings.skin](this, this.settings.skinParams);
+                skinInstance = window.lysSkins[this.settings.skin](this, this.settings.skinParams);
             }
             else {
                 devError("Undefined skin: " + this.settings.skin);
@@ -97,6 +102,14 @@
         };
 
 
+        /**
+         * Return the instance of the attached skin if any, or undefined otherwise.
+         */
+        this.getSkinInstance = function () {
+            return skinInstance;
+        };
+
+
         //------------------------------------------------------------------------------/
         // FIRE THE SENSORS
         //------------------------------------------------------------------------------/
@@ -106,9 +119,6 @@
     };
 
     $[pluginName].prototype = {
-        applySkin: function (lys) {
-
-        },
         fetch: function (sensorParams) {
             var zis = this;
             if (false !== zis.settings.onFetchBefore(zis, sensorParams)) {
@@ -130,7 +140,7 @@
         return this.each(function () {
             if (undefined == $(this).data(pluginName)) {
                 var plugin = new $[pluginName](this, options);
-                $(this).data([pluginName], plugin);
+                $(this).data(pluginName, plugin);
             }
         });
 
