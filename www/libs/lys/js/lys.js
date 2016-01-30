@@ -89,7 +89,7 @@
         //------------------------------------------------------------------------------/
         if (null !== this.settings.skin) {
             if (this.settings.skin in window.lysSkins) {
-                skinInstance = window.lysSkins[this.settings.skin](this, this.settings.skinParams);
+                skinInstance = new window.lysSkins[this.settings.skin](this, this.settings.skinParams);
             }
             else {
                 devError("Undefined skin: " + this.settings.skin);

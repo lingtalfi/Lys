@@ -113,7 +113,9 @@
              */
             scrollPreHelper: noop,
             /**
-             * A map of extra parameters to send to the server.
+             * callback|map
+             * A map of extra parameters to send to the server, or a callback that returns that map.
+             * 
              * Note that an auto-incremented parameter will be added to this map.
              */
             urlParams: {},
@@ -123,18 +125,18 @@
              */
             autoIncrementedUrlParamName: 'count',
             /**
-             * This plugin automatically set some of the lys options for you 
-             * (like the onFetchSuccess option for instance). 
-             * 
+             * This plugin automatically set some of the lys options for you
+             * (like the onFetchSuccess option for instance).
+             *
              * This might even override your own lys options.
              * To avoid any conflict between your options and THIS plugin's option,
              * you can use the pluginParams map.
-             * 
+             *
              * Technically speaking, you only need to put the conflictual options here
              * (look at THIS plugin's options: onFetchBefore, onFetchSucess, onFetchAfter, ...).
              * But if you don't want to bother, you can simply put all your options here...
-             * 
-             * 
+             *
+             *
              */
             pluginParams: {}
         }, options);
@@ -153,12 +155,17 @@
 
         /**
          * Set the new count.
+         * You can also use thie method as a reset, by simply not passing the newCount argument.
+         *          This will reset the count to the value of the startingCount option.
          */
-        this.setCount = function(newCount){
+        this.setCount = function (newCount) {
+            if('undefined' === typeof newCount){
+                newCount = settings.startingCount;
+            }
             count = newCount;
         };
-        
-        
+
+
         //------------------------------------------------------------------------------/
         // AUTO MARKUP
         //------------------------------------------------------------------------------/
@@ -198,16 +205,23 @@
                 //------------------------------------------------------------------------------/
                 function (lys) {
 
-                    var urlParams = $.extend({}, settings.urlParams); // assuming params do not change dynamically
-
 
                     $(lys.element).on('mousewheel.lys_waterball DOMMouseScroll.lys_waterball', function (e) {
                         settings.scrollPreHelper(e);
                         var zis = this;
                         clearTimeout($.data(this, 'timer'));
                         $.data(this, 'timer', setTimeout(function () {
+                            var urlParams;
+                            if ('function' === typeof settings.urlParams) {
+                                urlParams = $.extend({}, settings.urlParams());
+                            }
+                            else {
+                                urlParams = $.extend({}, settings.urlParams);
+                            }
+
+
                             var scrollDown = $(zis).scrollTop() + containerHeight;
-                            var triggerValue = $(zis).prop('scrollHeight') - settings.waterHeight;                            
+                            var triggerValue = $(zis).prop('scrollHeight') - settings.waterHeight;
                             if (scrollDown >= triggerValue) {
                                 urlParams[settings.autoIncrementedUrlParamName] = count++;
                                 lys.fetch(urlParams);

@@ -466,6 +466,13 @@ Lys default options
 History Log
 ------------------
     
+- 1.4.0 -- 2016-01-31
+
+    - waterball1: urlParams can be a function too
+    - waterball1: fix bug for retrieving lys instance 
+    - waterball1: enhance setCount method
+        
+    
 - 1.3.0 -- 2016-01-30
 
     - add lys_waterball namespace for mousewheel event
