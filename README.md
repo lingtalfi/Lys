@@ -207,11 +207,45 @@ all other elements are by default automatically generated (options.autoMarkup=tr
     },
     /**
      * By default, the params sent to the request is a map containing the (auto-incremented) count value.
-     * The startingCount option specifies the starting value of "count". 
-     * 
+     * The startingCount option specifies the starting value of "count".
+     *
      * Default is 1
      */
-    startingCount: 1
+    startingCount: 1,
+    /**
+     * This callback is executed at the beginning of the mouse wheel event.
+     * You can use it to manually move down the scrolled content, if you've overridden the default
+     * scrolling behaviour and put an overflow:hidden in your css for instance.
+     *
+     */
+    scrollPreHelper: noop,
+    /**
+     * callback|map
+     * A map of extra parameters to send to the server, or a callback that returns that map.
+     * 
+     * Note that an auto-incremented parameter will be added to this map.
+     */
+    urlParams: {},
+    /**
+     * The name of the auto-incremented url parameter.
+     * Default is "count".
+     */
+    autoIncrementedUrlParamName: 'count',
+    /**
+     * This plugin automatically set some of the lys options for you
+     * (like the onFetchSuccess option for instance).
+     *
+     * This might even override your own lys options.
+     * To avoid any conflict between your options and THIS plugin's option,
+     * you can use the pluginParams map.
+     *
+     * Technically speaking, you only need to put the conflictual options here
+     * (look at THIS plugin's options: onFetchBefore, onFetchSucess, onFetchAfter, ...).
+     * But if you don't want to bother, you can simply put all your options here...
+     *
+     *
+     */
+    pluginParams: {}
 }
 ```
 
@@ -321,7 +355,7 @@ See options for more details.
      * 
      * Default is 1
      */
-    startingCount: 1    
+    startingCount: 1 
 }
 ```
   
@@ -407,7 +441,7 @@ Lys default options
     /**
      * This callback is fired just before the service is requested.
      * If the callback returns false, then the service is NOT requested.
-     * 
+     *
      * - lys is the lys instance
      * - sensorParams are the params that are sent to the service.
      */
@@ -416,12 +450,12 @@ Lys default options
     /**
      * This callback is called after that the request to the service has been executed,
      * even if the request was a failure.
-     * 
-     * It simply is called via the .always() jquery method 
+     *
+     * It simply is called via the .always() jquery method
      * https://api.jquery.com/deferred.always/
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     onFetchAfter: function (lys, sensorParams) {
     },
@@ -435,21 +469,21 @@ Lys default options
     /**
      * A sensor is responsible for detecting WHEN the fetch service should be called.
      * It could be on page scroll, or on a button click, or other things...
-     * 
+     *
      * A sensor is just a callback, and its GOAL is to call the lys.fetch method.
-     * 
+     *
      *      void        callable:sensor ( lys )
      *                          // do something, then...
      *                          var requestParams = {};
-     *                          lys.fetch(requestParams); // call this method when you need it...    
-     *                              
-     * 
+     *                          lys.fetch(requestParams); // call this method when you need it...
+     *
+     *
      */
     sensors: [],
     /**
      * The name of the skin you want to use.
      * A skin is like a preset of sensors and more.
-     * 
+     *
      * With the power of skins, it's easy to do one liner setups...
      */
     skin: null,
