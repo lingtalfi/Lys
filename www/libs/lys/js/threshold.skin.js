@@ -125,7 +125,9 @@
             },
             sensors: [
                 function (lys) {
-                    $(window).on('scroll.lys', function () {
+                    $(window)
+                        .off('scroll.lys')
+                        .on('scroll.lys', function () {
                         var scrolledDistance = $(window).scrollTop();
                         var maximumScrollableDistance = $(document).height() - $(window).height();
                         if (scrolledDistance >= maximumScrollableDistance * settings.threshold / 100) {
