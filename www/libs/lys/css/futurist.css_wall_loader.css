@@ -2,14 +2,14 @@
 * This needs to be relative, because it will contain overlays/loaders/other external widgets
 * that we want to place on top of the wall
 */
-.wall_container {
+.lys.wall_container {
     position: relative;
 }
 
 /*
 * http://blogs.sitepointstatic.com/examples/tech/css3-ajax-icon/index.html
 */
-.lys_loader_overlay {
+.lys.wall_container .overlay {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -19,33 +19,15 @@
     transition: height 1s;
 }
 
-.wall_container.active .lys_loader_overlay {
-    height: 20%;
-}
 
-.wall_container .lys_loader {
+.lys.wall_container .loader {
     opacity: 0;
     transition: opacity 1s;
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
 
-.wall_container.active .lys_loader {
-    opacity: 1.0;
-}
-
-.lys_loader {
+.lys.wall_container .loader {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -58,4 +40,32 @@
     border-radius: 50%;
     box-shadow: 0 0 25px 2px #eee;
     opacity: 0;
+}
+
+
+/*******************************
+// ACTIVE
+*******************************/
+.lys.wall_container.active .overlay {
+    height: 20%;
+}
+
+.lys.wall_container.active .loader {
+    opacity: 1.0;
+}
+
+/*******************************
+// ANIMATION
+*******************************/
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
