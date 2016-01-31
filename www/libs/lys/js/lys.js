@@ -161,6 +161,10 @@
         //------------------------------------------------------------------------------/
         // PUBLIC METHODS
         //------------------------------------------------------------------------------/
+        /**
+         * The fetch method is the only interface (in lys) to fetch data from the data provider.
+         * This method is designed to be called by sensors only.
+         */
         this.fetch = function (sensorParams) {
             var zis = this;
             sensorParams = $.extend(sensorParams, getUrlParams());
@@ -187,6 +191,9 @@
             }
         };
 
+        /**
+         * Set the current count value
+         */
         this.setCountValue = function (v) {
             count = v;
         };

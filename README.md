@@ -306,6 +306,44 @@ Lys options
 } 
 ``` 
  
+ 
+ 
+Lys public properties
+-----------------------
+ 
+- element, the dom element on which the lys object was called, which by convention is the wall  
+- jElement, a jquery handle to the wall (by convention)
+- settings, the options passed to the lys object 
+
+
+Note that if lys is an instance of the lys object, $(lys.element) and lys.jElement are equivalent.
+
+
+Lys public methods 
+---------------------
+
+
+### fetch 
+
+```js
+void    fetch ( void|map:sensorParams )
+```
+        
+The fetch method is the only interface (in lys) to fetch data from the data provider.
+This method is designed to be called by sensors only.
+
+         
+### setCountValue 
+ 
+```js 
+void    setCountValue ( int:newCount )
+``` 
+
+Set the current count value
+
+
+
+ 
 
  
 
