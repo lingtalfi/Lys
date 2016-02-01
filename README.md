@@ -276,6 +276,25 @@ Lys options
     // FETCH RELATED OPTIONS
     //------------------------------------------------------------------------------/
     /**
+     * Whether or not to use the tim protocol to communicate with the data provider
+     */
+    useTim: false,
+    /**
+     * A callable to call when the data provider responds with a tim failure message,
+     * or null (default tim handler).
+     */
+    onTimError: null,
+    /**
+     * The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).
+     * http://api.jquery.com/jquery.post/
+     */
+    dataType: null,
+    /**
+     * The url params to start with.
+     * It's a map.
+     */
+    urlParams: {},
+    /**
      * This callback is fired just before the service is requested.
      * If the callback returns false, then the service is NOT requested.
      *
@@ -326,20 +345,52 @@ Lys public methods
 ### fetch 
 
 ```js
+/**
+ * This method fetches data from the service provider.
+ * It is called by the sensors, or you can call it manually.
+ *
+ * The "parameters" parameter can be one of the following:
+ * 
+ * - map, a map to merge with the urlParams and, if using it, the count parameter.
+ *              The resulting map will be passed to the data provider upon requesting the data.
+ *              
+ * - str=raw, this is a hack that allows you to call disable the onFetchBefore
+ *                      and onFetchAfter hooks that otherwise always fire.
+ *                      You might need this hack if you use the fetch method manually.
+ *                      
+ *                      The original motivation was to load the first page of data via lys.fetch,
+ *                      but without having the css transition of a loader showing up (assuming the loader plugin 
+ *                      is hooked to the onFetchBefore and onFetchAfter events, and that no other plugin
+ *                      uses those hooks).
+ *                      There might be other workarounds to this problem, but this was a simple one.
+ * 
+ * 
+ */
 void    fetch ( void|map:sensorParams )
 ```
-        
-The fetch method is the only interface (in lys) to fetch data from the data provider.
-This method is designed to be called by sensors only.
-
+   
          
 ### setCountValue 
  
 ```js 
+/**
+ * Sets the current count value.
+ * Use this to manually control the count value.
+ */
 void    setCountValue ( int:newCount )
 ``` 
 
-Set the current count value
+
+### setUrlParams
+
+```js
+/**
+ * Sets the current urlParams value.
+ * This value will be merged into the map that is sent to the data provider;
+ * the merging occurs on every request.
+ */
+void    setUrlParams ( map )         
+```
 
 
 
@@ -349,6 +400,12 @@ Set the current count value
 
 History Log
 ------------------
+    
+- 2.1.0 -- 2016-02-01
+
+    - add dataType, useTim, onTimError, urlParams options
+    - add skip argument hack for fetch method
+    - add setUrlParams method
     
 - 2.0.0 -- 2016-01-31
 

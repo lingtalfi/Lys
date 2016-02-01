@@ -93,6 +93,25 @@
             // FETCH RELATED OPTIONS
             //------------------------------------------------------------------------------/
             /**
+             * Whether or not to use the tim protocol to communicate with the data provider
+             */
+            useTim: false,
+            /**
+             * A callable to call when the data provider responds with a tim failure message,
+             * or null (default tim handler).
+             */
+            onTimError: null,
+            /**
+             * The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).
+             * http://api.jquery.com/jquery.post/
+             */
+            dataType: null,
+            /**
+             * The url params to start with.
+             * It's a map.
+             */
+            urlParams: {},
+            /**
              * This callback is fired just before the service is requested.
              * If the callback returns false, then the service is NOT requested.
              *
@@ -124,6 +143,7 @@
 
         var d = $.extend({}, defaults, options); // readonly
         var count = d.countValue; // this is meant as a private property
+        var urlParams = d.urlParams;
 
         //------------------------------------------------------------------------------/
         // PUBLIC PROPERTIES
@@ -150,11 +170,13 @@
             }
         }
 
-        function getUrlParams() {
-            if ('function' === typeof d.urlParams) {
-                return d.urlParams();
+        function fetchData(params, fnSuccess) {
+            if (true === d.useTim) {
+                return timPost(d.url, params, fnSuccess, d.onTimError);
             }
-            return d.urlParams;
+            else {
+                return $.post(d.url, params, fnSuccess, d.dataType);
+            }
         }
 
 
@@ -162,40 +184,77 @@
         // PUBLIC METHODS
         //------------------------------------------------------------------------------/
         /**
-         * The fetch method is the only interface (in lys) to fetch data from the data provider.
-         * This method is designed to be called by sensors only.
+         * This method fetches data from the service provider.
+         * It is called by the sensors, or you can call it manually.
+         *
+         * The "parameters" parameter can be one of the following:
+         * 
+         * - map, a map to merge with the urlParams and, if using it, the count parameter.
+         *              The resulting map will be passed to the data provider upon requesting the data.
+         *              
+         * - str=raw, this is a hack that allows you to call disable the onFetchBefore
+         *                      and onFetchAfter hooks that otherwise always fire.
+         *                      You might need this hack if you use the fetch method manually.
+         *                      
+         *                      The original motivation was to load the first page of data via lys.fetch,
+         *                      but without having the css transition of a loader showing up (assuming the loader plugin 
+         *                      is hooked to the onFetchBefore and onFetchAfter events, and that no other plugin
+         *                      uses those hooks).
+         *                      There might be other workarounds to this problem, but this was a simple one.
+         * 
+         * 
          */
-        this.fetch = function (sensorParams) {
+        this.fetch = function (parameters) {
+            var skipFetchBefore = false;
+            var skipFetchAfter = false;
+
+            if ('raw' == parameters) {
+                skipFetchBefore = true;
+                skipFetchAfter = true;
+            }
+
+
             var zis = this;
-            sensorParams = $.extend(sensorParams, getUrlParams());
+            var params = $.extend(parameters, urlParams);
 
-            if (false !== d.onFetchBefore(zis, sensorParams)) {
-                if (false !== callPlugins('onFetchBefore', [zis], true)) {
-
+            if (true === skipFetchBefore || false !== d.onFetchBefore(zis, params)) {
+                if (true === skipFetchBefore || false !== callPlugins('onFetchBefore', [zis], true)) {
 
                     if (true === d.useCount) {
-                        sensorParams[d.countParamName] = count++;
+                        params[d.countParamName] = count++;
                     }
 
-                    $.post(d.url, sensorParams, function (content) {
-
-
+                    fetchData(params, function (content) {
                         d.onFetchSuccess(zis, content);
 
 
                     }).always(function () {
-                        d.onFetchAfter(zis, sensorParams);
-                        callPlugins('onFetchAfter', [zis]);
+                        if (false === skipFetchAfter) {
+                            d.onFetchAfter(zis, params);
+                            callPlugins('onFetchAfter', [zis]);
+                        }
                     });
                 }
             }
         };
 
         /**
-         * Set the current count value
+         * Sets the current count value.
+         * Use this to manually control the count value.
          */
         this.setCountValue = function (v) {
             count = v;
+            return this;
+        };
+
+        /**
+         * Sets the current urlParams value.
+         * This value will be merged into the map that is sent to the data provider;
+         * the merging occurs on every request.
+         */
+        this.setUrlParams = function (map) {
+            urlParams = map;
+            return this;
         };
 
         //------------------------------------------------------------------------------/
