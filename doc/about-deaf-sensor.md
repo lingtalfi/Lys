@@ -3,6 +3,18 @@ About deaf sensor
 2016-02-02
 
 
+
+Disclaimer:
+    I found a new technique, that obsoletes the note below.
+    The new technique is: rather than emptying a container,
+    you mark old items, and once the new content is appended,
+    you remove the old items.
+    With this technique, scroll is not jumping at all, thus eliminating
+    the causes of the problem (explained below).
+    
+
+
+
 Since 2.2.0, the threshold sensor accepts a window.lysThresholdSensorDeaf flag,
 which makes it temporarily deaf.
 
