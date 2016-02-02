@@ -18,7 +18,6 @@
  * 
  */
 lys.sensors.waterball = function (options) {
-
     var d = $.extend({
         /**
          * The height (int in pixel) of the water at the bottom of your wall.
@@ -43,20 +42,13 @@ lys.sensors.waterball = function (options) {
          */
         requestDelay: 200
     }, options);
-
-
     this.listen = function (lys) {
-
         var wallHeight = lys.jElement.height();
         
         lys.jElement.on('mousewheel.lys_waterball DOMMouseScroll.lys_waterball', function (e) {
-
             var zis = this;
-
-
             clearTimeout($.data(this, 'timer'));
             $.data(this, 'timer', setTimeout(function () {
-
                 var scrollDown = $(zis).scrollTop() + wallHeight;
                 var triggerValue = $(zis).prop('scrollHeight') - d.waterHeight;
                 if (scrollDown >= triggerValue) {
@@ -65,6 +57,4 @@ lys.sensors.waterball = function (options) {
             }, d.requestDelay));
         });
     };
-
-
 };

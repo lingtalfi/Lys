@@ -401,6 +401,11 @@ void    setUrlParams ( map )
 History Log
 ------------------
     
+- 2.2.0 -- 2016-02-02
+
+    - add deaf option for threshold sensor
+    - add fnSuccess argument to lys.fetch method
+    
 - 2.1.0 -- 2016-02-01
 
     - add dataType, useTim, onTimError, urlParams options

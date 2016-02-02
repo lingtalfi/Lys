@@ -22,7 +22,6 @@
  *
  */
 lys.plugins.cssMainLoader = function (options) {
-
     var d = $.extend({
         /**
          * Whether or not to automatically build the necessary markup.
@@ -30,12 +29,8 @@ lys.plugins.cssMainLoader = function (options) {
          */
         autoMarkup: true
     }, options);
-
-
     var jBody = $('body');
     var jOverlay;
-
-
     this.init = function (lys) {
         if (true === d.autoMarkup) {
             if (0 === jBody.find('#lys_css_main_loader').length) {
@@ -44,11 +39,9 @@ lys.plugins.cssMainLoader = function (options) {
         }
         jOverlay = jBody.find('#lys_css_main_loader');
     };
-
     this.onFetchBefore = function (lys) {
         jOverlay.addClass('active');
     };
-
     this.onFetchAfter = function (lys) {
         setTimeout(function () {
             jOverlay.removeClass('active');

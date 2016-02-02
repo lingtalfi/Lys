@@ -1,5 +1,4 @@
 (function ($) {
-
     /**
      * The fundamentals:
      *
@@ -14,23 +13,16 @@
      *
      *
      */
-
     var pluginName = 'lys';
     window.lys = {
         sensors: {},
         plugins: {}
     };
-
-
     function devError(m) {
         alert(pluginName + ' dev error: ' + m);
     }
-
-
     $[pluginName] = function (element, options) {
-
         var zis = this;
-
         var defaults = {
             //------------------------------------------------------------------------------/
             // MAIN OPTIONS
@@ -140,19 +132,15 @@
                 lys.jElement.append(content);
             }
         };
-
         var d = $.extend({}, defaults, options); // readonly
         var count = d.countValue; // this is meant as a private property
         var urlParams = d.urlParams;
-
         //------------------------------------------------------------------------------/
         // PUBLIC PROPERTIES
         //------------------------------------------------------------------------------/
         this.element = element;
         this.jElement = $(element);
         this.settings = d;
-
-
         //------------------------------------------------------------------------------/
         // PRIVATE METHODS
         //------------------------------------------------------------------------------/
@@ -169,7 +157,6 @@
                 }
             }
         }
-
         function fetchData(params, fnSuccess) {
             if (true === d.useTim) {
                 return timPost(d.url, params, fnSuccess, d.onTimError);
@@ -178,8 +165,6 @@
                 return $.post(d.url, params, fnSuccess, d.dataType);
             }
         }
-
-
         //------------------------------------------------------------------------------/
         // PUBLIC METHODS
         //------------------------------------------------------------------------------/
@@ -187,47 +172,42 @@
          * This method fetches data from the service provider.
          * It is called by the sensors, or you can call it manually.
          *
-         * The "parameters" parameter can be one of the following:
-         * 
+         * @param parameters - mixed can be one of the following:
+         *
          * - map, a map to merge with the urlParams and, if using it, the count parameter.
          *              The resulting map will be passed to the data provider upon requesting the data.
-         *              
+         *
          * - str=raw, this is a hack that allows you to call disable the onFetchBefore
          *                      and onFetchAfter hooks that otherwise always fire.
          *                      You might need this hack if you use the fetch method manually.
-         *                      
+         *
          *                      The original motivation was to load the first page of data via lys.fetch,
-         *                      but without having the css transition of a loader showing up (assuming the loader plugin 
+         *                      but without having the css transition of a loader showing up (assuming the loader plugin
          *                      is hooked to the onFetchBefore and onFetchAfter events, and that no other plugin
          *                      uses those hooks).
          *                      There might be other workarounds to this problem, but this was a simple one.
+         *
          * 
-         * 
+         * @param fnSuccess - undefined|callback, an extra callback to fire in case of success.
+         *
          */
-        this.fetch = function (parameters) {
+        this.fetch = function (parameters, fnSuccess) {
             var skipFetchBefore = false;
             var skipFetchAfter = false;
-
             if ('raw' == parameters) {
                 skipFetchBefore = true;
                 skipFetchAfter = true;
             }
-
-
             var zis = this;
             var params = $.extend(parameters, urlParams);
-
             if (true === skipFetchBefore || false !== d.onFetchBefore(zis, params)) {
                 if (true === skipFetchBefore || false !== callPlugins('onFetchBefore', [zis], true)) {
-
                     if (true === d.useCount) {
                         params[d.countParamName] = count++;
                     }
-
                     fetchData(params, function (content) {
                         d.onFetchSuccess(zis, content);
-
-
+                        fnSuccess && fnSuccess();
                     }).always(function () {
                         if (false === skipFetchAfter) {
                             d.onFetchAfter(zis, params);
@@ -237,7 +217,6 @@
                 }
             }
         };
-
         /**
          * Sets the current count value.
          * Use this to manually control the count value.
@@ -246,7 +225,6 @@
             count = v;
             return this;
         };
-
         /**
          * Sets the current urlParams value.
          * This value will be merged into the map that is sent to the data provider;
@@ -256,37 +234,27 @@
             urlParams = map;
             return this;
         };
-
         //------------------------------------------------------------------------------/
         // START THE SENSORS...
         //------------------------------------------------------------------------------/
         for (var i in d.sensors) {
             d.sensors[i].listen(zis);
         }
-
-
         //------------------------------------------------------------------------------/
         // PLUGIN INIT
         //------------------------------------------------------------------------------/
         callPlugins('init', [this]);
     };
-
-
     $[pluginName].prototype = {};
-
-
     //------------------------------------------------------------------------------/
     // MAKE IT A JQUERY PLUGIN
     //------------------------------------------------------------------------------/
     $.fn[pluginName] = function (options) {
-
         return this.each(function () {
             if (undefined == $(this).data(pluginName)) {
                 var plugin = new $[pluginName](this, options);
                 $(this).data(pluginName, plugin);
             }
         });
-
     }
-
 })(jQuery);

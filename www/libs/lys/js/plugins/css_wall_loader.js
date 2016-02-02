@@ -39,7 +39,6 @@
  *
  */
 lys.plugins.cssWallLoader = function (options) {
-
     var d = $.extend({
         /**
          * Whether or not to automatically build the necessary markup.
@@ -47,11 +46,7 @@ lys.plugins.cssWallLoader = function (options) {
          */
         autoMarkup: true
     }, options);
-
-
     var jWallContainer;
-
-
     this.init = function (lys) {
         var jWall = lys.jElement;
         if (true === d.autoMarkup) {
@@ -61,7 +56,6 @@ lys.plugins.cssWallLoader = function (options) {
         
         jWallContainer = jWall.closest('.wall_container');
     };
-
     this.onFetchBefore = function (lys) {
         jWallContainer.addClass('active');
     };
