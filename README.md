@@ -394,7 +394,9 @@ void    setUrlParams ( map )
 
 
 
- 
+Related 
+-------------
+- [jInfiniteSlider](https://github.com/lingtalfi/jInfiniteSlider): infinite slider jquery plugin 
 
  
 
