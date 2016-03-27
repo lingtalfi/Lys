@@ -11,202 +11,218 @@ Lys can be installed as a [planet](https://github.com/lingtalfi/Observer/blob/ma
 
 
 
+Summary
+-------------
+
+- [Features](#features)
+- [How to use](#how-to-use)
+- [Nomenclature](#nomenclature)
+- [How does it work?](#how-does-it-work)
+- [Sensors](#sensors)
+- [Lys options](#lys-options)
+- [Friends](#friends)
+- [History Log](#history-log)
+
+
 
 
 Features
 ---------------
 
-- provide infinite scroll for the whole page (threshold sensor), or for a given element (waterball sensor)
+- provide infinite scroll mechanism
+- append new data when the scroll reaches a boundary
 - simple and lightweight
 - easily extendable
 - works in Chrome and Firefox (but probably not other browsers)
+- depends on jquery
 
-
-
-Note: depends on jquery
 
 
 ![Water and ball css3 transition at the bottom](http://s19.postimg.org/mggqxdtyb/lys.png)
 
 
 
-How does it work?
---------------------
+How to use
+----------------
 
 
-Basically, you have three components:
-
-- a wall, on which your items/content are appended
-- a data provider (or service), which provides the new items to append to the wall 
-- sensors, those are "listeners" that decide WHEN to fetch new data from the data provider
+The following demo illustrates the basic functionality of lys.
+Run the demo and scroll down the page to see the loader showing/hiding.
+The ajax loader that shows up comes from the [jajaxloader library](https://github.com/lingtalfi/JAjaxLoader/)
 
 
-A sensor is a callback that can detect anything: when the user reaches the bottom of the wall, or when she clicks a button, 
-or even every 3 seconds if you decided so...
-
-
-Then, you have plugins to enhance the basic behaviour of the lys plugin.
-For instance there are plugins to automatically add an ajax loader on your wall while the data are being fetched.
-
- 
- 
- 
-
-How to use?
-----------------------
-
-
-Let's try a first example (which is in /www/libs/lys/demo/waterball.demo.html by the way).
-
- 
-```html
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8"/>
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="/libs/lys/js/lys.js"></script>
-	<script src="/libs/lys/js/sensors/waterball.js"></script>
-	<script src="/libs/lys/js/plugins/css_wall_loader.js"></script>
-	<link rel="stylesheet" href="/libs/lys/css/futurist.css_wall_loader.css">
-	<title>Html page</title>
-	<style>
-
-
-		#page {
-			height: 400px;
-			overflow-y: scroll;
-			background: #ddd;
-			position: relative;
-		}
-
-
-	</style>
-</head>
-
-<body>
-
-<div class="wall" id="page">
-	<?php for ($i = 0; $i < 10; $i++): ?>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet cupiditate debitis deleniti eligendi
-		impedit
-		libero, molestiae officiis perspiciatis porro praesentium quaerat quia quis rem saepe sed sint
-		voluptate!
-		Accusantium, quis?<br>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam maxime, minima necessitatibus nemo
-		repellendus sapiente sed unde vel. Alias atque cum eius esse facere iste nesciunt possimus quidem
-		suscipit
-		veritatis.
-	</p>
-	<?php endfor; ?>
-
-</div>
-
-
-<script>
-
-
-	(function ($) {
-		$(document).ready(function () {
-			$('#page').lys({
-				url: "/libs/lys/service/lorem.php",
-				sensors: [new lys.sensors.waterball()],
-				plugins: [new lys.plugins.cssWallLoader()],
-				onFetchSuccess: function (lys, content) {
-					lys.jElement.append('<p>' + content + '</p>');
-				}
-			});
-		});
-	})(jQuery);
-</script>
-
-</body>
-</html> 
-``` 
+Codepen: http://codepen.io/lingtalfi/pen/xVrPmW
 
 
 
-This example used the waterball sensor, which listens to the scrolling movement of a given element on the page.
-When the unscrolled area goes down an arbitrary threshold, the sensor calls the lys.fetch method, which in turns 
-appends new data to the "wall" (the element that contains all the items).
-
-For more information about the waterball sensor, please browse the source code comments.
-
-
-     
-
- 
-A mini sensor tutorial
--------------------------
- 
-The example below shows a (pretty useless in real life) sensor that would fetch data every 3 seconds,
-and append them to the #page element.
-
-Although not really useful in a real world situation, it helps understanding the concept of sensors.
-
-The most important thing with sensors is to understand that the goal of a sensor is to call the lys.fetch method 
-when appropriate.
-
-Notice that you need a server that can serve php pages to run this example, because the data provider is 
-the www/libs/lys/service/lorem.php php script.
-
-
-
-```html
+```html 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+
+
     <script src="/libs/lys/js/lys.js"></script>
+
+
+    <script src="/libs/lys/plugin/sensor/waterball.js"></script>
+    <script src="/libs/lys/plugin/fetcher/lorem.js"></script>
+    <script src="/libs/lys/plugin/loader/wallwrapper.js"></script>
+
+
+
+    <script src="/libs/jajaxloader/js/jajaxloader.js"></script>
+    <link rel="stylesheet" href="/libs/jajaxloader/skin/jajaxloader.css">
+    <!-- using the jajaxloader ventilator built-in skin  -->
+    <script src="/libs/jajaxloader/skin/cssload/ventilator.js"></script>
+    <link rel="stylesheet" href="/libs/jajaxloader/skin/cssload/ventilator.css">
+
+
     <title>Html page</title>
     <style>
 
 
         #page {
             height: 400px;
-            background: #ddd;
             overflow-y: scroll;
+            background: #ddd;
+            position: relative;
         }
-        
+
+
     </style>
 </head>
 
 <body>
 
-<div id="page"></div>
+<div class="wall" id="page">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsa iusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+</div>
 
 
 <script>
 
+
     (function ($) {
         $(document).ready(function () {
-            
-            var mySensor = function(){
-                this.listen = function(lys){
-                    setInterval(function () {
-                        lys.fetch(); // the goal of a sensor is to call the lys.fetch method
-                    }, 3000);
-                };
-            };
-            
-            
-            $('#page').lys({
-                url: "/libs/lys/service/lorem.php",
-                sensors: [new mySensor()]
+
+
+            var jPage = $('#page');
+            var lys = new Lys({
+                plugins: [
+                    new LysSensorWaterBall({
+                        jTarget: jPage,
+                    }),
+                    new LysFetcherLorem(),
+                    new LysLoaderWallWrapper({
+                        jWall: jPage,
+                        onNeedData: function (jWallContainer) {
+                            jWallContainer.ajaxloader();
+                        },
+                        onDataReady: function (jWallContainer) {
+                            jWallContainer.ajaxloader("stop");
+                        },
+                    }),
+                ],
+                onDataReady: function (id, data) {
+                    jPage.append('<p>' + data + '</p>');
+                },
             });
+            lys.start();
+
         });
     })(jQuery);
 </script>
 
 </body>
-</html>
+</html> 
 ```
 
-If you understand the above example, then you can build your own infinite scroll behaviour from scratch.
- 
- 
+
+
+Nomenclature
+-----------------
+
+- Wall (aka target): the dom element to which new data will be appended
+
+
+How does it work?
+--------------------
+
+
+![CheatSheet](http://s19.postimg.org/v5itsfe5f/lys_dev_cheatsheet.jpg)
+
+
+Lys, since v3.0.0 works with plugins and events interaction.
+
+A plugin is any object with an init method, like the one in the example below.
+
+
+```js
+var myPlugin = new function(){ // this is a valid plugin
+    this.init = function( lys ){
+        // lys is the instance of the Lys object
+    };
+}
+```
+
+
+Plugins are organized based on their roles.
+
+The following roles have been identified so far:
+
+- sensor: detect WHEN new data should be appended. Fires the needData event then.
+- fetcher: fetches new data upon receiving a needData event. Fires the dataReady event when the data is ready to be used.
+
+
+
+Events interaction defines the relationship between plugins and the core Lys object.
+Plugins can trigger and subscribe to events using the Lys's on and trigger methods.
+
+So far, the events are:
+
+
+- needData: indicate that new data is required (for instance when the user scrolls down past the last item)
+- dataReady: indicate that new data has arrived (and should be inserted into the dom)
+
+
+The Lys object offers two handy hooks, via its onNeedData and onDataReady options, to that the user can plug in
+her application logic. 
+Typically, how new data is inserted into the dom, and if there is an ajax loader showing/hiding, Lys hooks is a good place 
+to do that too.
+
+
+
+
+
+     
+Sensors
+------------     
+
+Sensors are plugins which role is to detect WHEN new data should be fetched.
+
+The built-in sensors are:
+
+- waterball: triggers the needData event based on the relative scrolled distance compared to the height of the host (aka wall, aka target) object 
+- threshold: triggers the needData event based on the relative scrolled distance compared to the window 
+
+
+
+
+
  
  
  
@@ -215,194 +231,58 @@ Lys options
  
 ```js
 {
-    //------------------------------------------------------------------------------/
-    // MAIN OPTIONS
-    //------------------------------------------------------------------------------/
     /**
-     * The url of the data provider
-     */
-    url: '/libs/lys/service/lorem.php',
-    /**
-     * A sensor is responsible for detecting WHEN the new data should be fetched.
-     * It could be on page scroll, or on a button click, or other things...
-     *
-     * A sensor is an object with a listen method.
-     *
-     *      void        sensor.listen ( lys )
-     *                          The GOAL of the method is to call the lys.fetch method at some point.
-     *
-     *                          // do something, then...
-     *                          var params = {};
-     *                          lys.fetch(params); // call this method when you need it...
-     *
-     *
-     */
-    sensors: [],
-    /**
-     * Plugins are objects that can add functionality to the lys core.
-     * The possible methods are the following:
-     *
-     * - void       init ( lys )
-     * - false      onFetchBefore ( lys )
-     *                  If false is returned, it stops the propagation (subsequent
-     *                  plugins' onFetchBefore method is not called)
-     *                  and the data provider is not fetched.
-     *
-     * - void       onFetchAfter ( lys )
+     * An array of plugins.
+     * A plugin is an object with an init method.
+     * 
+     *      void init ( LysInstance )
+     *      
      */
     plugins: [],
-    //------------------------------------------------------------------------------/
-    // COUNT RELATED OPTIONS
-    //------------------------------------------------------------------------------/
     /**
-     * Count is a system that automatically appends an auto-incremented field to
-     * the params sent to the data provider.
-     * The count parameter is only incremented when the data provider is actually requested.
-     *
+     * a callback triggered when the needData event is triggered (via the dispatcher system).
+     * 
+     * The id argument is the session identifier.
+     * 
+     * It is used to identify a fetch data session (needData -> dataReady).
+     * The same id value should be passed with both the needData and dataReady events.
+     * 
      */
-    /**
-     * Whether or not to use the count system
-     */
-    useCount: true,
-    /**
-     * The name of the count parameter
-     */
-    countParamName: "count",
-    /**
-     * The default count value to start with
-     */
-    countValue: 1,
-    //------------------------------------------------------------------------------/
-    // FETCH RELATED OPTIONS
-    //------------------------------------------------------------------------------/
-    /**
-     * Whether or not to use the tim protocol to communicate with the data provider
-     */
-    useTim: false,
-    /**
-     * A callable to call when the data provider responds with a tim failure message,
-     * or null (default tim handler).
-     */
-    onTimError: null,
-    /**
-     * The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).
-     * http://api.jquery.com/jquery.post/
-     */
-    dataType: null,
-    /**
-     * The url params to start with.
-     * It's a map.
-     */
-    urlParams: {},
-    /**
-     * This callback is fired just before the service is requested.
-     * If the callback returns false, then the service is NOT requested.
-     *
-     * - lys is the lys instance
-     * - sensorParams are the params that are sent to the service.
-     */
-    onFetchBefore: function (lys, sensorParams) {
+    onNeedData: function (id) {
+
     },
     /**
-     * This callback is called after that the request to the service has been executed,
-     * even if the request was a failure.
+     * a callback triggered when the dataReady event is triggered (via the dispatcher system)
      *
-     * It simply is called via the .always() jquery method
-     * https://api.jquery.com/deferred.always/
-     *
-     *
-     *
+     * The id argument should come from a triggered needData event.
+     * The data argument represents the received data.
      */
-    onFetchAfter: function (lys, sensorParams) {
+    onDataReady: function (id, data) {
+
     },
-    /**
-     * This callback is called after you receive content from a (successful) request to the server.
-     * It is mainly used to append the new content to your wall.
-     */
-    onFetchSuccess: function (lys, content) {
-        lys.jElement.append(content);
-    }
 } 
 ``` 
  
  
  
-Lys public properties
------------------------
  
-- element, the dom element on which the lys object was called, which by convention is the wall  
-- jElement, a jquery handle to the wall (by convention)
-- settings, the options passed to the lys object 
 
 
-Note that if lys is an instance of the lys object, $(lys.element) and lys.jElement are equivalent.
-
-
-Lys public methods 
----------------------
-
-
-### fetch 
-
-```js
-/**
- * This method fetches data from the service provider.
- * It is called by the sensors, or you can call it manually.
- *
- * The "parameters" parameter can be one of the following:
- * 
- * - map, a map to merge with the urlParams and, if using it, the count parameter.
- *              The resulting map will be passed to the data provider upon requesting the data.
- *              
- * - str=raw, this is a hack that allows you to call disable the onFetchBefore
- *                      and onFetchAfter hooks that otherwise always fire.
- *                      You might need this hack if you use the fetch method manually.
- *                      
- *                      The original motivation was to load the first page of data via lys.fetch,
- *                      but without having the css transition of a loader showing up (assuming the loader plugin 
- *                      is hooked to the onFetchBefore and onFetchAfter events, and that no other plugin
- *                      uses those hooks).
- *                      There might be other workarounds to this problem, but this was a simple one.
- * 
- * 
- */
-void    fetch ( void|map:sensorParams )
-```
-   
-         
-### setCountValue 
- 
-```js 
-/**
- * Sets the current count value.
- * Use this to manually control the count value.
- */
-void    setCountValue ( int:newCount )
-``` 
-
-
-### setUrlParams
-
-```js
-/**
- * Sets the current urlParams value.
- * This value will be merged into the map that is sent to the data provider;
- * the merging occurs on every request.
- */
-void    setUrlParams ( map )         
-```
-
-
-
-Related 
+Friends 
 -------------
-- [jInfiniteSlider](https://github.com/lingtalfi/jInfiniteSlider): infinite slider jquery plugin 
+
+- [jajaxloader](https://github.com/lingtalfi/JAjaxLoader/): some easy to trigger ajax loaders 
 
  
 
 History Log
 ------------------
     
+- 3.0.0 -- 2016-03-27
+
+    - reforge the core, now Lys is even more decoupled, it's not a jquery plugin anymore, just an object
+
+
 - 2.2.0 -- 2016-02-02
 
     - add deaf option for threshold sensor
