@@ -186,6 +186,8 @@ The following roles have been identified so far:
 
 - sensor: detect WHEN new data should be appended. Fires the needData event then.
 - fetcher: fetches new data upon receiving a needData event. Fires the dataReady event when the data is ready to be used.
+- loader: takes care of showing/hiding the ajax loader, should you use one. The loader starts  
+                when the needData event is triggered, and stops when the dataReady event is triggered.
 
 
 
@@ -201,8 +203,7 @@ So far, the events are:
 
 The Lys object offers two handy hooks, via its onNeedData and onDataReady options, to that the user can plug in
 her application logic. 
-Typically, how new data is inserted into the dom, and if there is an ajax loader showing/hiding, Lys hooks is a good place 
-to do that too.
+Typically, how new data is inserted into the dom.
 
 
 
@@ -272,12 +273,17 @@ Friends
 -------------
 
 - [jajaxloader](https://github.com/lingtalfi/JAjaxLoader/): some easy to trigger ajax loaders 
+- [screenDebug](https://github.com/lingtalfi/ScreenDebug): a helper to monitor realtime values (useful for debugging sensors)  
 
  
 
 History Log
 ------------------
     
+- 3.1.0 -- 2016-03-27
+
+    - removed forgotten console.log from lys core object
+
 - 3.0.0 -- 2016-03-27
 
     - reforge the core, now Lys is even more decoupled, it's not a jquery plugin anymore, just an object

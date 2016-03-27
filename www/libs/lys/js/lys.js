@@ -94,7 +94,7 @@
         //    }
         //},
         trigger: function (eventName, ...args) {
-            console.log("trigger: " + eventName, args[0]);
+            //console.log("trigger: " + eventName, args[0]);
             if (eventName in this.listeners) {
                 for (var pos in this.listeners[eventName]) {
                     for (var i in this.listeners[eventName][pos]) {
