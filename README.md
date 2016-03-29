@@ -46,9 +46,13 @@ How to use
 ----------------
 
 
-The following demo illustrates the basic functionality of lys.
-Run the demo and scroll down the page to see the loader showing/hiding.
-The ajax loader that shows up comes from the [jajaxloader library](https://github.com/lingtalfi/JAjaxLoader/)
+
+
+### The waterball example
+
+
+
+Use this when your target is an element on the page, but not the whole body.
 
 
 Codepen: http://codepen.io/lingtalfi/pen/xVrPmW
@@ -153,9 +157,176 @@ Codepen: http://codepen.io/lingtalfi/pen/xVrPmW
 
 
 
+In the above example, the #page element is the target. We will append items to it.
+  
+When the target is a specific element (not the body itself), I like to use the waterball sensor.
+
+The waterball sensor triggers the needData event whenever the user has scrolled to the bottom of the target.
+
+The needData is generally captured to retrieve data, and also to start an ajax-loader.
+
+For this demo, we used a dummy lorem fetcher service to retrieve the data.
+
+As for the ajax-loader, since we could have multiple walls (targets) on the same page, we want the ajax-loader
+to show up only in our #page element.
+In order to do that, we've used the wallwrapper loader, which updates the html of the wall so that we can inject 
+our loader in it.
+
+The wallwrapper loader also provides hooks for the needData and dataReady events, we used 
+those to show/hide our ajax-loader.
+
+We used the [jajaxloader library](https://github.com/lingtalfi/JAjaxLoader) for the loader, because it plays well 
+with lys. 
+
+
+
+
+### The threshold example
+
+
+Use this when your target is the body.
+
+http://codepen.io/lingtalfi/pen/RagYeW
+
+
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+
+
+    <script src="/libs/tim/js/tim.js"></script>
+
+
+    <script src="/libs/lys/js/lys.js"></script>
+
+
+    <script src="/libs/lys/plugin/sensor/threshold.js"></script>
+    <script src="/libs/lys/plugin/fetcher/postservice.js"></script>
+    <script src="/libs/lys/plugin/fetcher/postservice/timhandler.js"></script>
+    <script src="/libs/lys/plugin/loader/wallwrapper.js"></script>
+
+
+    <script src="/libs/jajaxloader/js/jajaxloader.js"></script>
+    <link rel="stylesheet" href="/libs/jajaxloader/skin/jajaxloader-body.css">
+    <!-- using the jajaxloader ventilator built-in skin  -->
+    <script src="/libs/jajaxloader/skin/cssload/ventilator.js"></script>
+    <link rel="stylesheet" href="/libs/jajaxloader/skin/cssload/ventilator.css">
+
+
+    <title>Html page</title>
+    <style>
+
+        .loader_overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<div class="wall" id="page">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque consequatur eaque est fugit in ipsaiusto, placeat quam quis quisquam ratione reprehenderit saepe sit soluta sunt velit veritatis voluptatem?</p>
+</div>
+
+
+<script>
+
+
+    (function ($) {
+        $(document).ready(function () {
+
+
+            var jPage = $('#page');
+            var jBody = $(document.body);
+
+
+            var lys = new Lys({
+                plugins: [
+                    new LysSensorThreshold(),
+                    new LysFetcherPostService({
+                        url: '/libs/lys/demo/service/lorem.php',
+                        handler: new LysFetcherPostServiceTimHandler(),
+                    }),
+                ],
+                onNeedData: function () {
+                    jBody.ajaxloader();
+                },
+                onDataReady: function (id, data) {
+                    jBody.ajaxloader("stop");
+                    jPage.append('<p>' + data + '</p>');
+                },
+            });
+            lys.start();
+
+        });
+    })(jQuery);
+</script>
+
+</body>
+</html> 
+```
+
+
+
+
+In the above example, the #page element is the target. We will append items to it.
+
+However, we used a threshold sensor to trigger the needData event.
+  
+The threshold sensor detects scrolling on the window element (and not on the #page element).  
+  
+When the user has scrolled to the bottom of the window, the threshold sensor triggers the needData event.
+
+The needData is generally captured to retrieve data, and also to start an ajax-loader.
+
+For this demo, we used a php lorem service to retrieve the data.
+
+This service uses [tim protocol](https://github.com/lingtalfi/Tim).
+
+
+The Lys object provides hooks for the needData and dataReady events, we used those to show/hide our ajax-loader.
+
+We used the [jajaxloader library](https://github.com/lingtalfi/JAjaxLoader) for the loader, because it plays well 
+with lys. Notice that we called the jajaxloader-body.css stylesheet, which basically ensures that our overlay will always
+be visible at the bottom of the body element.
+
+
+
+
+
 Nomenclature
 -----------------
 
+- target (aka wall): see wall
 - Wall (aka target): the dom element to which new data will be appended
 
 
@@ -274,11 +445,16 @@ Friends
 
 - [jajaxloader](https://github.com/lingtalfi/JAjaxLoader/): some easy to trigger ajax loaders 
 - [screenDebug](https://github.com/lingtalfi/ScreenDebug): a helper to monitor realtime values (useful for debugging sensors)  
+- [tim](https://github.com/lingtalfi/Tim): a simple protocol for app communication with services
 
  
 
 History Log
 ------------------
+    
+- 3.2.0 -- 2016-03-27
+
+    - add postservice fetcher with tim handler
     
 - 3.1.0 -- 2016-03-27
 

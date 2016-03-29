@@ -73,14 +73,21 @@
                     if (scrolledDistance >= threshold) {
 
 
-                        oldScrolledDistance = scrolledDistance;
+                        // validate only scroll down moves (not scroll up moves)
+                        if (oldScrolledDistance < scrolledDistance) {
 
-                        lys.trigger('needData', zis.d.cptPrefix + dataCpt);
-                        isBlocked = true;
-                        /**
-                         * Note: with this blocking technique, it is assumed that the needData handler sets a timeout
-                         * of at least 0 microseconds (a lorem fetcher without setTimeout would fail at least in chrome).
-                         */
+                            oldScrolledDistance = scrolledDistance;
+
+                            lys.trigger('needData', zis.d.cptPrefix + dataCpt);
+                            isBlocked = true;
+                            /**
+                             * Note: with this blocking technique, it is assumed that the needData handler sets a timeout
+                             * of at least 0 microseconds (a lorem fetcher without setTimeout would fail at least in chrome).
+                             */
+                        }
+                        else{
+                            oldScrolledDistance = 0; // reset for next time
+                        }
                     }
 
                 }
