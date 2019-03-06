@@ -16,7 +16,7 @@ Install
 
 Using the [uni tool](https://github.com/lingtalfi/universe-naive-importer)
 ```bash
-uni import Lys
+uni import Ling/Lys
 ```
 
 
